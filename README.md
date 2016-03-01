@@ -1,8 +1,3 @@
 # jsonstringify
-A reimplemetation of jSON.stringify
+A reimplemetation of JSON.stringify
 
-To begin I know that I want it
-
-```sh
-	var a = 1;
-```

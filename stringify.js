@@ -1,7 +1,5 @@
-// this is what you would do if you liked things to be easy:
-// var stringifyJSON = JSON.stringify;
+//Implement a function called stringify that emulates JSON.stringify. If you wanted it to be easy you'd say stringify = JSON.stringify - but we're looking for a solution from scratch.
 
-// but you don't so you're going to write it from scratch:
 // The proper implementation of my code should output the following: 
   	//stringify({});                  // '{}'
 	//stringify(true);                // 'true'
@@ -25,15 +23,15 @@
 
 
 //the first thing is to write base cases for the inputs that I know how to stringify
-//I know that for numbers and booleans I can return input + "" 
+//I know that for numbers, booleans, null, and undefined I can return input + "" 
 	//so for example 
 		//9 + "" ==> "9"
 		//false + "" ==> "false"
 		//true + "" ==> "true"
 //I also know that I can use the "typeof" property in javascript to determine if the input is a string
-//so if the typeof input is a string i will return '"' + input '"'
+//so if the typeof input is a string I will return '"' + input '"'
 
-//The next input type that I have to deal with are arrays. This is tricky because the javascript interpretter does not the array that we are expecting. I can't just use the typeof to check if its an array because both arrays, functions, and null will return object. So instead I use the Array.isArray() method. Next I found that I can just wrap quotes around an empty array and get the desired result. 
+//The next input type that I have to deal with are arrays. This is tricky because the javascript interpretter does not return the array that I am expecting. I can't just use the typeof to check if its an array because both arrays, functions, and null will return object. So instead I use the Array.isArray() method. Next I found that I can't just wrap quotes around an empty array and get the desired result. 
 //For example:
 	//var in = [];
 	//'"' + in + '"' ==> '""' (check your console to verify)
@@ -47,11 +45,11 @@
 	//But when I do run the code below here's what happens:
 		//var a = [1, "false", false];
 		//"[" + a + "]" ==> '[1, false, false]' (Oh nooooo!)
-	//these results let me know that I have to iterate over each element in the array and check for its type. The best way to get internal quotes around the "false" is to recursively invoke my stringify function on that element and push the returned value into a new array. finally I can return the stringified version of my new array as 
+	//these results let me know that I have to iterate over each element in the array and check for its type. The best way to get internal quotes around the "false" is to recursively invoke my stringify function on each element and push the returned value into a new array. I can return the stringified version of my new array as 
 
 	// "[" + newarray.join(',') + "]"
 
-//Finally I need my code to deal with object literals. For an input to qualify as an object literal the type of input must be true and the input must return true. This is will especially take care of cases in which input = null; since null will return false it will not qualify as an object literal. From here objects will be stringified similar to arrays
+//Finally I need my code to deal with object literals. For an input to qualify as an object literal the type of input must be true and the input must return true. This is will especially take care of cases in which input = null; since null and undefined will return false it will not qualify as an object literal. From here objects will be stringified similar to arrays
 
 //I will iterate through each key in an object. I need to push the key and value into the the array in a very specific way. 
 	//newarry.push(stringify(key) + ":" + stringify(obj[key]))
@@ -84,18 +82,19 @@ var stringify = function(obj) {
 		for(var i = 0; i < obj.length; i++) {
 			newArray.push(stringify(obj[i]));
 		}
-		return '[' + newArray.join(',') + ']'
+		return '[' + newArray.join(',') + ']';
 	}
 	if(obj && typeof obj === 'object') {
-		var newArray = [];
+		var newObjArray = [];
 		for(var key in obj) {
 			if(obj[key] !== undefined && typeof obj[key] !== 'function') {
-				newArray.push(stringify(key) ":" stringify(obj[key]))
+				newObjArray.push(stringify(key) + ":" + stringify(obj[key]));
 			}
 		}
-		return "{" + newArray.join(',') + "}";
+		return "{" + newObjArray.join(',') + "}";
 	}
 
 	return obj + "";
-}
+};
+
 
