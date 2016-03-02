@@ -74,16 +74,28 @@
 
 //Solution
 var stringify = function(obj) {
+	if(typeof obj === 'undefined') {
+		return undefined;
+	}
+
+	if(typeof obj === 'function') {
+		return undefined;
+	}
+
 	if(typeof obj === 'string') {
 		return '"' + obj + '"';
 	}
+
 	if(Array.isArray(obj)) {
 		var newArray = [];
 		for(var i = 0; i < obj.length; i++) {
-			newArray.push(stringify(obj[i]));
+			if(obj[i] !== undefined && typeof obj[i] !== 'function') {
+				newArray.push(stringify(obj[i]));	
+			}
 		}
 		return '[' + newArray.join(',') + ']';
 	}
+	
 	if(obj && typeof obj === 'object') {
 		var newObjArray = [];
 		for(var key in obj) {
